@@ -2,24 +2,28 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
-
+const config = require('./_config.js')
 // Define routes
 let index = require('./routes/index');
 let image = require('./routes/image');
 
 // connecting the database
-let mongodb_url = 'mongodb://localhost:27017/';
-let dbName = 'darkroom';
-mongoose.connect(`${mongodb_url}${dbName}`,{ useNewUrlParser: true , useUnifiedTopology: true }, (err)=>{
-    if (err) console.log(err)
-});
+
+const env = process.env.NODE_ENV || 'development'
+
+mongoose.connect(config.mongoURI[env])
+.then(() =>console.log("Connected to Mongo DB Atlas"))
+.catch((err) =>console.log("Failed to connect", err.message))
+
 
 // test if the database has connected successfully
-let db = mongoose.connection;
-db.once('open', ()=>{
-    console.log('Database connected successfully')
+
+let db = mongoose.connection
+db.once('open', () =>{
+    console.log("Database connected successfully")
 })
 
+db.on('error', (err) =>console.log('Database connection failed'))
 // Initializing the app
 const app = express();
 
