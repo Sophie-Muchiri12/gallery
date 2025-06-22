@@ -34,6 +34,28 @@ if (fs.existsSync('public')) {
     copyDirectory('public', distDir);
 }
 
+// Function to get images from public directory
+const getImages = () => {
+    const imagesDir = path.join(__dirname, 'public', 'images');
+    if (!fs.existsSync(imagesDir)) {
+        console.warn('⚠️  Images directory not found, using empty array');
+        return [];
+    }
+    
+    try {
+        return fs.readdirSync(imagesDir)
+            .filter(file => /\.(jpg|jpeg|png|gif|webp)$/i.test(file))
+            .map(filename => ({
+                filename,
+                path: `/images/${filename}`,
+                alt: filename.replace(/\.[^/.]+$/, "").replace(/[-_]/g, ' ')
+            }));
+    } catch (error) {
+        console.warn('⚠️  Error reading images directory:', error.message);
+        return [];
+    }
+};
+
 // Render EJS to HTML
 const renderEJSToHTML = async () => {
     try {
@@ -53,7 +75,8 @@ const renderEJSToHTML = async () => {
                 repository: "Sophie-Muchiri12/gallery",
                 buildTool: "Jenkins Pipeline",
                 hosting: "Render Static"
-            }
+            },
+            images: getImages() // Add the images array here
         };
         
         // Render EJS to HTML
@@ -64,6 +87,7 @@ const renderEJSToHTML = async () => {
         
         console.log('✅ Successfully built static site!');
         console.log('📁 Files generated in dist/ directory');
+        console.log(`🖼️  Found ${templateData.images.length} images`);
         
     } catch (error) {
         console.error('❌ Error building static site:', error);
