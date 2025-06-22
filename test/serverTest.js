@@ -11,16 +11,6 @@ chai.use(chaiHttp);
 
 describe('Photos', function(){
 
-        after(function(done) {
-        if (mongoose.connection.readyState === 1) {
-            mongoose.connection.close(function() {
-                console.log('Database connection closed');
-                done();
-            });
-        } else {
-            done();
-        }
-    });
     
     it('should list ALL photos on / GET', function(done){
         this.timeout(60000);
