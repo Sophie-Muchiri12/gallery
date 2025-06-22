@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
 const config = require('./_config.js')
+
+
 // Define routes
 let index = require('./routes/index');
 let image = require('./routes/image');
@@ -11,7 +13,10 @@ let image = require('./routes/image');
 
 const env = process.env.NODE_ENV || 'development'
 
-mongoose.connect(config.mongoURI[env])
+mongoose.connect(config.mongoURI[env],{
+    useNewUrlParser:true,
+    useUnifiedTopology:true
+})
 .then(() =>console.log("Connected to Mongo DB Atlas"))
 .catch((err) =>console.log("Failed to connect", err.message))
 
@@ -43,8 +48,12 @@ app.use('/image', image);
 
 
 
- 
+ if (require.main === module){
 const PORT = process.env.PORT || 5000;
 app.listen(PORT,() =>{
     console.log(`Server is listening at http://localhost:${PORT}`)
 });
+
+ }
+
+ module.exports = app
