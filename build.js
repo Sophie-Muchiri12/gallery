@@ -61,9 +61,7 @@ const renderEJSToHTML = async () => {
     try {
         // Path to your EJS file
         const ejsFile = path.join(__dirname, 'views', 'index.ejs');
-        // Or if it's in root: const ejsFile = path.join(__dirname, 'index.ejs');
         
-        // Data to pass to your EJS template (customize as needed)
         const templateData = {
             title: "Sophie's Gallery - DevOps Milestones",
             milestones: [

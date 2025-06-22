@@ -5,6 +5,10 @@ pipeline{
         nodejs 'NodeJS'
     }
     
+    environment{
+        RENDER_URL = 'https://gallery-static.onrender.com'
+    }
+    
     stages{
         stage('Check code'){
             steps{
@@ -23,6 +27,7 @@ pipeline{
         stage("Building code"){
             steps{
                 echo "Building code"
+                sh "node build.js"
               
             }
         }
@@ -76,6 +81,23 @@ pipeline{
         success{
             echo "Pipeline completed successfully"
             echo "Deployment to Render was successful"
+            
+            slackSend(
+                channel: '#all-sophieip1',
+                color: 'good',
+                tokenCredentialId: 'Sophie_IP1',
+                message: """
+                Deployment Successful
+                
+                Build details:
+                Build ID: #${env.BUILD_NUMBER}
+                Branch: master
+                
+                Live Site: ${env.RENDER_URL}
+                
+                """
+                
+                )
         }
         
         always{
