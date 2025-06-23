@@ -51,31 +51,7 @@ pipeline{
     
     post{
         failure{
-            emailext(
-                subject: "Pipeline Tests Failed on Gallery Project - Build #${env.BUILD_NUMBER}",
-                body: """
-                <html>
-                <body>
-                    <h2>Pipeline Failed Tests</h2>
-                    
-                    <p>The Jenkins pipeline for Tests in the Gallery Repo Project failed</p>
-                    
-                    <h3>Build Details:</h3>
-                    
-                    <ul>
-                        <li>Job Name: ${env.JOB_NAME}</li>
-                        <li>Build Number: ${env.BUILD_NUMBER}</li>
-                        <li>Build URL: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></li>
-                    </ul>
-                    
-                    <p>Please check the <a href="${env.BUILD_URL}console">console output</a> for more details</p>
-                    
-                </body>
-                </html>
-                """,
-                to: "muthonisophie12@gmail.com",
-                mimeType: 'text/html'
-            )
+            echo "PipeLine failed"
         }
         
         success{
